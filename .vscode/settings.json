@@ -1,0 +1,4 @@
+{
+  "git.ignoreLimitWarning": true,
+  "python.pythonPath": "venv_data_warehouse/bin/python3"
+}

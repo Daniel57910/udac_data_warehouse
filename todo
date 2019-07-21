@@ -1,2 +1,4 @@
-- begin analysis of project requirements
-- use boto3 to connect to AWS S3 and list directories
+- review parralel computing 
+- parralelize extraction of log and song data
+- review anaconda dependency management
+

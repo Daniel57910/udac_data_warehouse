@@ -2,3 +2,34 @@
 - parralelize extraction of log and song data
 - review anaconda dependency management
 
+SONG JSON:
+artist_id -> NOT NULL
+artist_latitude
+artist_location
+artist_longitude
+artist_name -> NOT NULL
+duration
+num_songs
+song_id -> NOT NULL
+title -> NOT NULL
+year
+
+LOG JSON:
+artist
+auth
+firstName
+gender
+itemInSession
+lastName
+length
+level
+location
+method
+page
+registration
+sessionId
+song
+status
+ts
+userAgent
+userId

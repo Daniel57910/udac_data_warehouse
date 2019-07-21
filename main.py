@@ -3,10 +3,14 @@ from multiprocessing import Pool
 from lib.file_finder import FileFinder
 from lib.data_loader import DataLoader
 import subprocess
+import os
 from joblib import Parallel, delayed
 
 def fetch_files_from_s3(suffix):
   subprocess.run(f'aws s3 sync s3://udacity-dend/{suffix} /tmp/{suffix}', shell=True, check=True)
+
+def has_hashable_key(key):
+  return len(str(key)) > 0
 
 def fetch_file_names(suffix, file_type):
   file_finder = FileFinder(f'/tmp/{suffix}/', file_type)
@@ -33,6 +37,17 @@ def main():
     data_dict[dir] = fetch_file_names(dir, '*.json')
 
   log_dataframe, song_dataframe = dataframe_assignment(data_dict)
+
+  song_dataframe = song_dataframe[
+    song_dataframe.artist_id.apply(has_hashable_key) &
+    song_dataframe.song_id.apply(has_hashable_key) &
+    song_dataframe.artist_name.apply(has_hashable_key) &
+    song_dataframe.title.apply(has_hashable_key)
+  ]
+
+  song_dataframe.to_csv(
+    path_or_buf=os.getcwd()+'/song_data.csv', index=False
+  )
 
 
 

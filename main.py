@@ -1,7 +1,9 @@
 import multiprocessing
 from multiprocessing import Pool
 from lib.file_finder import FileFinder
+from lib.data_loader import DataLoader
 import subprocess
+from joblib import Parallel, delayed
 
 def fetch_files_from_s3(suffix):
   subprocess.run(f'aws s3 sync s3://udacity-dend/{suffix} /tmp/{suffix}', shell=True, check=True)
@@ -10,6 +12,10 @@ def fetch_file_names(suffix, file_type):
   file_finder = FileFinder(f'/tmp/{suffix}/', file_type)
   return file_finder.return_file_names()
 
+def load_json_from_files(file_list):
+  data_loader = DataLoader(file_list)
+  return data_loader.create_json_from_files()
+
 def main():
 
   data_dict = {}
@@ -17,10 +23,20 @@ def main():
   # with Pool(processes=multiprocessing.cpu_count()) as pool:
   #   [pool.apply_async(fetch_files_from_s3, (dir, )) for dir in directories]
 
-  data_dict['log_data'] = fetch_file_names(directories[0], '*.json')
+  for dir in directories:
+    data_dict[dir] = fetch_file_names(dir, '*.json')
 
-  for d in data_dict['log_data']:
-    print(d)
+  results = Parallel(n_jobs=4)(
+    delayed(load_json_from_files)(list(data_dict[i])) for i in data_dict
+  )
+
+  print(results[0].head(10))
+  print(results[1].head(10))
+
+ 
+
+
+
 
   
 

@@ -12,28 +12,31 @@ def fetch_file_names(suffix, file_type):
   file_finder = FileFinder(f'/tmp/{suffix}/', file_type)
   return file_finder.return_file_names()
 
-def load_json_from_files(file_list):
+def dataframe_assignment(data_dict):
+    return Parallel(n_jobs=4)(
+      delayed(load_dataframe_from_files)(list(data_dict[i])) for i in data_dict
+    )
+
+def load_dataframe_from_files(file_list):
   data_loader = DataLoader(file_list)
-  return data_loader.create_json_from_files()
+  return data_loader.create_dataframe_from_files()
 
 def main():
 
   data_dict = {}
   directories = ['log_data', 'song_data']
+
   # with Pool(processes=multiprocessing.cpu_count()) as pool:
   #   [pool.apply_async(fetch_files_from_s3, (dir, )) for dir in directories]
 
   for dir in directories:
     data_dict[dir] = fetch_file_names(dir, '*.json')
 
-  results = Parallel(n_jobs=4)(
-    delayed(load_json_from_files)(list(data_dict[i])) for i in data_dict
-  )
+  log_dataframe, song_dataframe = dataframe_assignment(data_dict)
 
-  print(results[0].head(10))
-  print(results[1].head(10))
 
- 
+
+
 
 
 

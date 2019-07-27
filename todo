@@ -1,1 +1,2 @@
 UML steps and automate pushing to s3
+copy data from s3 to redshift staging table

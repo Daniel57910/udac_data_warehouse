@@ -32,6 +32,9 @@ def load_dataframe_from_files(file_list):
   data_loader = DataLoader(file_list)
   return data_loader.create_dataframe_from_files()
 
+def push_staging_files_to_s3(current_dir):
+  subprocess.run(f'aws s3 sync {current_dir}/data s3://sparkify-staging-dmiller/data/',shell=True,check=True)
+
 def main():
 
   data_dict = {}
@@ -44,25 +47,44 @@ def main():
   song_path = os.getcwd() + '/song_data.csv'
 
   database_wrapper = DatabaseWrapper(conn_string)
+
   for command in table_commands:
     database_wrapper.execute(command)
 
+  # with Pool(processes=multiprocessing.cpu_count()) as pool:
+  #   pool.map(fetch_files_from_s3, directories)
+
   for dir in directories:
-      data_dict[dir] = fetch_file_names(f'{local_path}/{dir}/', '*.json')
+    data_dict[dir] = fetch_file_names(f'{local_path}/{dir}/', '*.json')
 
   log_dataframe, song_dataframe = dataframe_assignment(data_dict)
 
   song_dataframe = song_dataframe[
-      song_dataframe.artist_id.apply(has_hashable_key) &
-      song_dataframe.song_id.apply(has_hashable_key) &
-      song_dataframe.artist_name.apply(has_hashable_key) &
-      song_dataframe.title.apply(has_hashable_key)
+    song_dataframe.artist_id.apply(has_hashable_key) &
+    song_dataframe.song_id.apply(has_hashable_key) &
+    song_dataframe.artist_name.apply(has_hashable_key) &
+    song_dataframe.title.apply(has_hashable_key)
+  ]
+
+  log_dataframe = log_dataframe[
+    log_dataframe.userId.apply(has_hashable_key) &
+    log_dataframe.firstName.apply(has_hashable_key) &
+    log_dataframe.lastName.apply(has_hashable_key)
   ]
 
   song_dataframe.to_csv(
-    path_or_buf=aggregate_csv_path + 'song_data.csv', 
+    path_or_buf=aggregate_csv_path + 'song_staging.csv', 
     index=False
   )
+
+  log_dataframe.to_csv(
+    path_or_buf=aggregate_csv_path + 'log_staging.csv'
+  )
+
+  push_staging_files_to_s3(os.getcwd())
+
+
+
 
 
 if __name__ == "__main__":

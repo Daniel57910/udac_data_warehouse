@@ -1,4 +1,1 @@
-- review parralel computing 
-- review anaconda dependency management
-- create redshift staging tables for log and song data, connect to DB using this method:
-https://classroom.udacity.com/nanodegrees/nd027/parts/69a25b76-3ebd-4b72-b7cb-03d82da12844/modules/58ff61b9-a54f-496d-b4c7-fa22750f6c76/lessons/b3ce1791-9545-4187-b1fc-1e29cc81f2b0/concepts/183d03fb-ba73-458f-94d3-f91ebdc674b9
+UML steps and automate pushing to s3

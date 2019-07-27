@@ -1,0 +1,1 @@
+aws s3 sync ~/Documents/GitHub/udac_data_warehouse/data s3://sparkify-staging-dmiller/

@@ -1,2 +1,17 @@
 UML steps and automate pushing to s3
-copy data from s3 to redshift staging table
+copy data from s3 to redshift staging table for both tables
+write down explicilty what needed
+refactor current design and separate main into multiple files and objects
+review psql errors 
+
+dev=# select line_number, err_reason from stl_load_errors;
+ line_number |                                              err_reason
+-------------+------------------------------------------------------------------------------------------------------
+           1 | Delimiter not found
+           1 | Delimiter not found
+           1 | Delimiter not found
+           1 | Delimiter not found
+           1 | Delimiter not found
+           1 | Delimiter not found
+           2 | Invalid digit, Value 'F', Pos 1, Type: Decimal
+(7 rows)

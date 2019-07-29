@@ -24,6 +24,10 @@ def fetch_file_names(file_path, file_type):
   return file_finder.return_file_names()
 
 def dataframe_assignment(data_dict):
+
+    # first_files = data_dict['song_data']
+
+    # load_dataframe_from_files(first_files)
     return Parallel(n_jobs=4)(
       delayed(load_dataframe_from_files)(list(data_dict[i])) for i in data_dict
     )
@@ -74,14 +78,23 @@ def main():
 
   song_dataframe.to_csv(
     path_or_buf=aggregate_csv_path + 'song_staging.csv', 
-    index=False
+    index=False,
+    header=False
   )
 
   log_dataframe.to_csv(
-    path_or_buf=aggregate_csv_path + 'log_staging.csv'
+    path_or_buf=aggregate_csv_path + 'log_staging.csv',
+    sep=',',
+    index=False,
+    header=False
   )
 
-  push_staging_files_to_s3(os.getcwd())
+  # push_staging_files_to_s3(os.getcwd())
+
+  # copy_string = "COPY song_staging FROM 's3://sparkify-staging-dmiller/data/song_staging.csv' iam_role 'arn:aws:iam::774141665752:role/redshift_s3_role'"
+
+
+  # database_wrapper.execute(copy_string)
 
 
 

@@ -1,6 +1,7 @@
 song_staging_table = '''CREATE TABLE IF NOT EXISTS song_staging
 (artist_id TEXT not null,
 artist_latitude NUMERIC,
+artist_location TEXT,
 artist_longitude NUMERIC,
 artist_name TEXT not null,
 duration NUMERIC,

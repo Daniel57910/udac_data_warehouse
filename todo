@@ -15,3 +15,20 @@ dev=# select line_number, err_reason from stl_load_errors;
            1 | Delimiter not found
            2 | Invalid digit, Value 'F', Pos 1, Type: Decimal
 (7 rows)
+
+
+in each entry replace , .
+remove "'
+
+
+tmp/log_data/2018/11/2018-11-02-events.json:{"artist":"Rionegro \/ Solim\u00c3\u0083\u00c2\u00b5es","auth":"Logged In","firstName":"Lily","gender":"F","itemInSession":62,"lastName":"Koch","length":280.92036,"level":"paid","location":"Chicago-Naperville-Elgin, IL-IN-WI","method":"PUT","page":"NextSong","registration":1541048010796.0,"sessionId":172,"song":"De S\u00c3\u0083\u00c2\u00a3o Paulo \u00c3\u0083\u00c2\u0080 Bel\u00c3\u0083\u00c2\u00a9m","status":200,"ts":1541163717796,"userAgent":"\"Mozilla\/5.0 (X11; Linux x86_64) AppleWebKit\/537.36 (KHTML, like Gecko) Ubuntu Chromium\/36.0.1985.125 Chrome\/36.0.1985.125 Safari\/537.36\"","userId":"15"}
+tmp/song_data/A/R/T/TRARTCH12903D0C55A.json:{"artist_id":"ARNJRQ91187B9ACFDD","artist_latitude":-14.24292,"artist_location":"S\ufffdPaulo, Brazil","artist_longitude":-54.38783,"artist_name":"Cibelle","duration":272.74404,"num_songs":1,"song_id":"SOMMUDQ12AC468B191","title":"The Gun and the Knife","year":2010}
+tmp/song_data/A/T/Z/TRATZDT12903CAECE5.json:{"artist_id":"ARZEHMQ1187B9950C0","artist_latitude":null,"artist_location":"","artist_longitude":null,"artist_name":"Paulo Flores","duration":337.08363,"num_songs":1,"song_id":"SOZRYQY12AB0188BE0","title":"Poema do semba","year":0}
+tmp/song_data/A/A/D/TRAADYB128F92D7E73.json:{"artist_id":"ARGMXQW1187FB54C34","artist_latitude":-23.56287,"artist_location":"Sao Paulo, Brazil","artist_longitude":-46.65466,"artist_name":"Eliane Elias","duration":251.42812,"num_songs":1,"song_id":"SOPHYIS12AAF3B35A3","title":"The More I See You","year":2009}
+tmp/song_data/A/O/P/TRAOPPO128F4259139.json:{"artist_id":"ARIPW1E1187FB38233","artist_latitude":-14.24292,"artist_location":"S\ufffdPaulo, Brazil","artist_longitude":-54.38783,"artist_name":"Adoniran Barbosa","duration":118.64771,"num_songs":1,"song_id":"SOEEWSN12A58A787FB","title":"As Mariposa","year":0}
+tmp/song_data/A/D/A/TRADAGQ128F422733A.json:{"artist_id":"ARNJRQ91187B9ACFDD","artist_latitude":-14.24292,"artist_location":"S\ufffdPaulo, Brazil","artist_longitude":-54.38783,"artist_name":"Cibelle","duration":259.97016,"num_songs":1,"song_id":"SOEFSTF12A58A7B01F","title":"Gracefully","year":2005}
+tmp/song_data/A/Q/Q/TRAQQTW128F1466D86.json:{"artist_id":"ARGMXQW1187FB54C34","artist_latitude":-23.56287,"artist_location":"Sao Paulo, Brazil","artist_longitude":-46.65466,"artist_name":"Eliane Elias","duration":201.22077,"num_songs":1,"song_id":"SOGSJVU12A6D4F8735","title":"All The Things You Are","year":1995}
+tmp/song_data/A/E/P/TRAEPKF128F4285C25.json:{"artist_id":"ARNJRQ91187B9ACFDD","artist_latitude":-14.24292,"artist_location":"S\ufffdPaulo, Brazil","artist_longitude":-54.38783,"artist_name":"Cibelle","duration":251.03628,"num_songs":1,"song_id":"SOPLKKK12A58A7670D","title":"London_ London","year":0}
+tmp/song_data/A/L/G/TRALGFI128F93500EE.json:{"artist_id":"ARZEHMQ1187B9950C0","artist_latitude":null,"artist_location":"","artist_longitude":null,"artist_name":"Paulo Flores","duration":282.85342,"num_songs":1,"song_id":"SOZJZQG12AB01828BD","title":"Belina","year":0}
+tmp/song_data/A/Y/I/TRAYITB128F145EF28.json:{"artist_id":"ARGMXQW1187FB54C34","artist_latitude":-23.56287,"artist_location":"Sao Paulo, Brazil","artist_longitude":-46.65466,"artist_name":"Eliane Elias","duration":138.39628,"num_songs":1,"song_id":"SOOIWMK12A6D4F6972","title":"The Beat Of My Heart","year":2000}
+tmp/song_data/A/P/H/TRAPHGD128F1486C63.json:{"artist_id":"ARIPW1E1187FB38233","artist_latitude":-14.24292,"artist_location":"S\ufffdPaulo, Brazil","artist_longitude":-54.38783,"artist_name":"Adoniran Barbosa","duration":120.31955,"num_songs":1,"song_id":"SOXSPXW12A6D4F9AA3","title":"Tocar Na Banda","year":0}

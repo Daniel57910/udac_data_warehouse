@@ -10,6 +10,11 @@ from sql.tables import table_commands
 import psycopg2
 import configparser
 import pdb
+import re
+
+def remove_dangerous_characters(entry):
+  regex = r'([^\s\w]+)'
+  return re.sub(regex, '', str(entry))
 
 
 def fetch_files_from_s3(suffix):
@@ -67,8 +72,13 @@ def main():
     song_dataframe.artist_id.apply(has_hashable_key) &
     song_dataframe.song_id.apply(has_hashable_key) &
     song_dataframe.artist_name.apply(has_hashable_key) &
-    song_dataframe.title.apply(has_hashable_key)
+    song_dataframe.title.apply(has_hashable_key) 
   ]
+
+  song_text_columns = ['artist_location', 'artist_name', 'title']
+  for col in song_text_columns:
+    song_dataframe[col] = song_dataframe[col].apply(remove_dangerous_characters)
+
 
   log_dataframe = log_dataframe[
     log_dataframe.userId.apply(has_hashable_key) &
@@ -82,14 +92,14 @@ def main():
     header=False
   )
 
-  log_dataframe.to_csv(
-    path_or_buf=aggregate_csv_path + 'log_staging.csv',
-    sep=',',
-    index=False,
-    header=False
-  )
+  # log_dataframe.to_csv(
+  #   path_or_buf=aggregate_csv_path + 'log_staging.csv',
+  #   sep=',',
+  #   index=False,
+  #   header=False
+  # )
 
-  # push_staging_files_to_s3(os.getcwd())
+  push_staging_files_to_s3(os.getcwd())
 
   # copy_string = "COPY song_staging FROM 's3://sparkify-staging-dmiller/data/song_staging.csv' iam_role 'arn:aws:iam::774141665752:role/redshift_s3_role'"
 

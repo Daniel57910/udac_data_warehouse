@@ -11,21 +11,21 @@ title -> NOT NULL
 year
 
 LOG JSON:
-artist
-auth
-firstName
-gender
-itemInSession
-lastName
-length
-level
-location
-method
-page
-registration
-sessionId
-song
-status
-ts
-userAgent
-userId
+artist -> TEXT
+auth -> TEXT
+firstName -> TEXT
+gender -> TEXT
+itemInSession, INT
+lastName -> INT
+length, NUMERIC, 
+level -> TEXT
+location -> TEXT CLEAN
+method -> TEXT
+page -> TEXT
+registration, NUMERIC
+sessionId, INT
+song -> TEXT
+status, TEXT
+ts, BIGINT
+userAgent -> TEXT CLEAN
+userId, INT

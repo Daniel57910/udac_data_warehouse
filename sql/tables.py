@@ -30,7 +30,7 @@ timestamp BIGINT,
 user_agent TEXT,
 user_id TEXT);'''
 
-artist_table = '''CREATE TABLE IF NOT EXISTS d_artist
+d_artist_table = '''CREATE TABLE IF NOT EXISTS d_artist
 (artist_key BIGINT identity(0, 1),
 artist_id TEXT not null,
 artist_latitude NUMERIC,
@@ -40,12 +40,36 @@ artist_name TEXT not null,
 PRIMARY KEY(artist_key))
 COMPOUND SORTKEY(artist_key, artist_id, artist_name);'''
 
-song_insert_query = '''INSERT INTO song_staging VALUES
-(%s, %s, %s, %s, %s, %s, %s, %s, %s);'''
+d_song_table = '''CREATE TABLE IF NOT EXISTS d_song
+(song_key BIGINT identity(0, 1),
+song_id TEXT,
+title TEXT,
+duration NUMERIC,
+year INT,
+artist_id TEXT REFERENCES d_artist(artist_key),
+PRIMARY KEY(song_key))
+COMPOUND SORTKEY(artist_id, title, year);'''
+
+d_app_user_table = '''CREATE TABLE IF NOT EXISTS d_app_user
+(app_user_key BIGINT identity(0, 1),
+app_user_id INT,
+first_name TEXT,
+last_name TEXT,
+gender TEXT,
+level TEXT,
+PRIMARY KEY(app_user_key))
+COMPOUND SORTKEY(app_user_key, first_name, last_name);'''
 
 
-table_commands = ['DROP TABLE IF EXISTS song_staging;', 'DROP TABLE IF EXISTS log_staging;', 'DROP TABLE IF EXISTS d_artist;']
-create_all_tables = [song_staging_table, log_staging_table, artist_table]
+table_commands = [
+  'DROP TABLE IF EXISTS song_staging;', 
+  'DROP TABLE IF EXISTS log_staging;', 
+  'DROP TABLE IF EXISTS d_artist;', 
+  'DROP TABLE IF EXISTS d_song;',
+  'DROP TABLE IF EXISTS d_app_user;'
+]
+table_commands.reverse()
+create_all_tables = [song_staging_table, log_staging_table, d_artist_table, d_song_table, d_app_user_table]
 table_commands.extend(create_all_tables)
 
 

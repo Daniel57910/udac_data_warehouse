@@ -1,5 +1,5 @@
-create dimension tables out of song database
-populate dimension tables from song database
+populate app_user table with app_user data
+think about how to dedupe app_data from within sql or python
 make database wrapper class object so globally accessable
 
 

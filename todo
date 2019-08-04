@@ -1,5 +1,5 @@
 populate app_user table with app_user data
-think about how to dedupe app_data from within sql or python
+create query to idenitfy whether user free or paid
 make database wrapper class object so globally accessable
 
 

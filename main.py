@@ -15,10 +15,13 @@ def transfer_from_csv_to_staging(database_wrapper):
   database_wrapper.execute(copy_song_staging)
   database_wrapper.execute(copy_log_staging)
 
+
 def push_staging_files_to_s3(current_dir):
   subprocess.run(f'aws s3 sync {current_dir}/data s3://sparkify-staging-dmiller/data/',shell=True,check=True)
 
 def main():
+
+  distinct_app_user_query = '''SELECT DISTINCT app_user_id FROM d_app_user;'''
 
   config = configparser.ConfigParser()
   config.read('secrets.ini')
@@ -31,6 +34,9 @@ def main():
   # fetch_and_dump_to_csv()
   transfer_from_csv_to_staging(database_wrapper)
   populate_tables_from_staging(database_wrapper)
+
+  distinct_app_users = database_wrapper.select(distinct_app_user_query)
+  pdb.set_trace()
 
 
 if __name__ == "__main__":

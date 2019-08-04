@@ -22,24 +22,16 @@ SELECT
 FROM
   song_staging;'''
 
-app_user_insert = '''INSERT INTO d_app_user (app_user_id, first_name, last_name, gender, level)
+app_user_insert = '''INSERT INTO d_app_user (app_user_id, first_name, last_name, gender, level, timestamp)
 SELECT  
   CAST(user_id AS INT),
   first_name,
   last_name,
   gender,
-  level
+  level,
+  timestamp
 FROM
   log_staging;
-
-CREATE TABLE app_user_free AS
-SELECT app_user_id, first_name, last_name, gender, level
-FROM d_app_user
-WHERE level = 'free';
-
-CREATE TABLE app_user_dup_free AS
-SELECT DISTINCT *
-FROM app_user_free;
 '''
 
 query_content = [artist_insert, song_insert, app_user_insert]

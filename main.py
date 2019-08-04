@@ -22,7 +22,12 @@ def push_staging_files_to_s3(current_dir):
 def main():
 
   distinct_app_user_query = '''SELECT DISTINCT app_user_id FROM d_app_user;'''
-
+  ordered_app_user_query = '''SELECT * FROM d_app_user
+  WHERE
+    app_user_id = {}
+  ORDER BY timestamp desc
+  LIMIT 1
+  ;'''
   config = configparser.ConfigParser()
   config.read('secrets.ini')
   conn_string = "host={} dbname={} user={} password={} port={}".format(*config['CLUSTER'].values())
@@ -31,11 +36,16 @@ def main():
   for command in table_commands:
     database_wrapper.execute(command)
 
+  users = []
   # fetch_and_dump_to_csv()
   transfer_from_csv_to_staging(database_wrapper)
   populate_tables_from_staging(database_wrapper)
 
   distinct_app_users = database_wrapper.select(distinct_app_user_query)
+
+  for user in distinct_app_users:
+    users.append(database_wrapper.select(ordered_app_user_query.format(user[0])))
+
   pdb.set_trace()
 
 

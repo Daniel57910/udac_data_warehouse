@@ -1,7 +1,5 @@
-create staging table for log data
-copy data from s3 to redshift staging table for both tables
-write down explicilty what needed
+plan out design and refactor
 refactor current design and separate main into multiple files and objects
-review psql errors 
+create dimension tables out of song database
+populate dimensino tables from song database
 
-{"artist":"Kenny G","auth":"Logged In","firstName":"Chloe","gender":"F","itemInSession":53,"lastName":"Cuevas","length":256.57424,"level":"paid","location":"San Francisco-Oakland-Hayward, CA","method":"PUT","page":"NextSong","registration":1540940782796.0,"sessionId":648,"song":"Everlasting","status":200,"ts":1542412944796,"userAgent":"Mozilla\/5.0 (Windows NT 5.1; rv:31.0) Gecko\/20100101 Firefox\/31.0","userId":"49"}

@@ -11,15 +11,13 @@ class DatabaseWrapper:
       self.cursor = self.conn.cursor()
     except:
       print('Unable to connect to the DB')
-      exit(1)
 
   def execute(self, query):
     
     try:
       self.cursor.execute(query)
     except Exception as e:
-      print('Unable to execute query')
+      print(f'Unable to execute query {query}')
       print(e)
-      exit(1)
 
 

@@ -58,8 +58,7 @@ last_name TEXT,
 gender TEXT,
 level TEXT,
 PRIMARY KEY(app_user_key))
-COMPOUND SORTKEY(app_user_key, first_name, last_name);'''
-
+COMPOUND SORTKEY(app_user_key, first_name, last_name, level);'''
 
 table_commands = [
   'DROP TABLE IF EXISTS song_staging;', 

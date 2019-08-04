@@ -30,8 +30,19 @@ SELECT
   gender,
   level
 FROM
-  log_staging;'''
+  log_staging;
+
+CREATE TABLE app_user_free AS
+SELECT app_user_id, first_name, last_name, gender, level
+FROM d_app_user
+WHERE level = 'free';
+
+CREATE TABLE app_user_dup_free AS
+SELECT DISTINCT *
+FROM app_user_free;
+'''
 
 query_content = [artist_insert, song_insert, app_user_insert]
 query = OrderedDict(zip(query_names, query_content))
+
 

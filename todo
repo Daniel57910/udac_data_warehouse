@@ -1,5 +1,5 @@
 populate app_user table with app_user data
-create query to idenitfy whether user free or paid
+drop actual_app_users_into d_app_user
 make database wrapper class object so globally accessable
 
 

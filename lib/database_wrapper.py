@@ -20,10 +20,12 @@ class DatabaseWrapper:
     except Exception as e:
       print(f'Unable to execute query {query}: {e}')
   
-  def select(self, query):
+  def select(self, query, fetch_one=False):
     try:
       self.execute(query)
-      return self.cursor.fetchall()
+      if not fetch_one:
+        return self.cursor.fetchall()
+      return self.cursor.fetchone()
     except Exception as e:
       print(f'Unable to execute {query}: {e}')
 

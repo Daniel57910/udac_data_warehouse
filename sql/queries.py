@@ -1,6 +1,6 @@
 
 from collections import OrderedDict
-query_names = ['artist_insert', 'song_insert', 'app_user_insert']
+query_names = ['artist_insert', 'song_insert', 'app_user_insert', 'app_user_staging']
 
 artist_insert = '''INSERT INTO d_artist (artist_id, artist_latitude, artist_location, artist_longitude, artist_name)
 SELECT
@@ -31,10 +31,11 @@ SELECT
   level,
   timestamp
 FROM
-  log_staging;
-'''
+  log_staging;'''
 
-query_content = [artist_insert, song_insert, app_user_insert]
+app_user_staging = '''CREATE TABLE d_app_user_id AS SELECT app_user_id FROM d_app_user;'''
+
+query_content = [artist_insert, song_insert, app_user_insert, app_user_staging]
 query = OrderedDict(zip(query_names, query_content))
 
 

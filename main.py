@@ -21,12 +21,11 @@ def push_staging_files_to_s3(current_dir):
 
 def main():
 
-  distinct_app_user_query = '''SELECT DISTINCT app_user_id FROM d_app_user;'''
-  ordered_app_user_query = '''SELECT * FROM d_app_user
+  distinct_app_user_query = '''SELECT DISTINCT * from d_app_user_id;'''
+  ordered_app_user_query = '''SELECT TOP 1 * FROM d_app_user
   WHERE
     app_user_id = {}
   ORDER BY timestamp desc
-  LIMIT 1
   ;'''
   config = configparser.ConfigParser()
   config.read('secrets.ini')
@@ -44,9 +43,14 @@ def main():
   distinct_app_users = database_wrapper.select(distinct_app_user_query)
 
   for user in distinct_app_users:
-    users.append(database_wrapper.select(ordered_app_user_query.format(user[0])))
+    result = database_wrapper.select(ordered_app_user_query.format(user[0]), True)
+    users.append(result)
 
   pdb.set_trace()
+
+
+
+
 
 
 if __name__ == "__main__":

@@ -1,5 +1,9 @@
-plan out design and refactor
-refactor current design and separate main into multiple files and objects
 create dimension tables out of song database
-populate dimensino tables from song database
+populate dimension tables from song database
+make database wrapper class object so globally accessable
 
+
+redshift
+review distkey -> determines how data distributed across cluster
+sortkey -> creates compound columns that's sorted to enable binary search
+primary key -> key used to reference table on joins 

@@ -14,7 +14,6 @@ def remove_dangerous_characters(entry):
   regex = r'([^\s\w]+)'
   return re.sub(regex, '', str(entry))
 
-
 def fetch_files_from_s3(suffix):
   local_path = os.getcwd() + '/tmp' + f'/{suffix}'
   subprocess.run(f'aws s3 sync s3://udacity-dend/{suffix} {local_path}', shell=True, check=True)
@@ -27,7 +26,6 @@ def fetch_file_names(file_path, file_type):
   return file_finder.return_file_names()
 
 def dataframe_assignment(data_dict):
-
     return Parallel(n_jobs=4)(
         delayed(load_dataframe_from_files)(
             list(data_dict[i])) for i in data_dict
@@ -36,7 +34,6 @@ def dataframe_assignment(data_dict):
 def load_dataframe_from_files(file_list):
   data_loader = DataLoader(file_list)
   return data_loader.create_dataframe_from_files()
-
 
 def fetch_and_dump_to_csv():
   data_dict = {}

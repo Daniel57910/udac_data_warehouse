@@ -22,7 +22,7 @@ def push_staging_files_to_s3(current_dir):
 def main():
 
   distinct_app_user_query = '''SELECT DISTINCT * from d_app_user_id;'''
-  ordered_app_user_query = '''SELECT TOP 1 * FROM d_app_user
+  ordered_app_user_query = '''SELECT TOP 1 * FROM d_app_user_staging
   WHERE
     app_user_id = {}
   ORDER BY timestamp desc
@@ -32,24 +32,24 @@ def main():
   conn_string = "host={} dbname={} user={} password={} port={}".format(*config['CLUSTER'].values())
   database_wrapper = DatabaseWrapper(conn_string)
 
-  for command in table_commands:
-    database_wrapper.execute(command)
+  # for command in table_commands:
+  #   database_wrapper.execute(command)
 
   users = []
   # fetch_and_dump_to_csv()
-  transfer_from_csv_to_staging(database_wrapper)
-  populate_tables_from_staging(database_wrapper)
+  # transfer_from_csv_to_staging(database_wrapper)
+  # populate_tables_from_staging(database_wrapper)
 
   distinct_app_users = database_wrapper.select(distinct_app_user_query)
 
+  print('executing query for distinct_app_users')
   for user in distinct_app_users:
     result = database_wrapper.select(ordered_app_user_query.format(user[0]), True)
     users.append(result)
+    print(result)
 
-  pdb.set_trace()
-
-
-
+  for u in users:
+    print(u)
 
 
 

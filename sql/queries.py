@@ -22,7 +22,7 @@ SELECT
 FROM
   song_staging;'''
 
-app_user_insert = '''INSERT INTO d_app_user (app_user_id, first_name, last_name, gender, level, timestamp)
+app_user_staging_insert = '''INSERT INTO d_app_user_staging (app_user_id, first_name, last_name, gender, level, timestamp)
 SELECT  
   CAST(user_id AS INT),
   first_name,
@@ -33,9 +33,8 @@ SELECT
 FROM
   log_staging;'''
 
-app_user_staging = '''CREATE TABLE d_app_user_id AS SELECT app_user_id FROM d_app_user;'''
+app_user_id_insert = '''CREATE TABLE d_app_user_id AS SELECT app_user_id FROM d_app_user_staging;'''
 
-query_content = [artist_insert, song_insert, app_user_insert, app_user_staging]
-query = OrderedDict(zip(query_names, query_content))
+query = [artist_insert, song_insert, app_user_staging_insert, app_user_id_insert]
 
 

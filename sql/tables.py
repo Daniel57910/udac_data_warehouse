@@ -50,7 +50,7 @@ artist_id TEXT REFERENCES d_artist(artist_key),
 PRIMARY KEY(song_key))
 COMPOUND SORTKEY(artist_id, title, year);'''
 
-d_app_user_table = '''CREATE TABLE IF NOT EXISTS d_app_user
+d_app_user_table_staging = '''CREATE TABLE IF NOT EXISTS d_app_user_staging
 (app_user_key BIGINT identity(0, 1),
 app_user_id INT,
 first_name TEXT,
@@ -58,6 +58,17 @@ last_name TEXT,
 gender TEXT,
 level TEXT,
 timestamp BIGINT,
+PRIMARY KEY(app_user_id))
+COMPOUND SORTKEY(app_user_id, timestamp);'''
+
+d_app_user_table = '''CREATE TABLE IF NOT EXISTS
+d_app_user(
+app_user_key BIGINT identity(0, 1),
+app_user_id INT,
+first_name TEXT,
+last_name TEXT,
+gender TEXT,
+level TEXT,
 PRIMARY KEY(app_user_id));'''
 
 table_commands = [
@@ -65,10 +76,11 @@ table_commands = [
   'DROP TABLE IF EXISTS log_staging;', 
   'DROP TABLE IF EXISTS d_artist;', 
   'DROP TABLE IF EXISTS d_song;',
-  'DROP TABLE IF EXISTS d_app_user;'
+  'DROP TABLE IF EXISTS d_app_user_staging;',
+  'DROP TABLE IF EXISTS d_app_user'
 ]
 table_commands.reverse()
-create_all_tables = [song_staging_table, log_staging_table, d_artist_table, d_song_table, d_app_user_table]
+create_all_tables = [song_staging_table, log_staging_table, d_artist_table, d_song_table, d_app_user_table_staging, d_app_user_table]
 table_commands.extend(create_all_tables)
 
 

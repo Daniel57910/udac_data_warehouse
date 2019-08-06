@@ -22,11 +22,16 @@ def push_staging_files_to_s3(current_dir):
 def main():
 
   distinct_app_user_query = '''SELECT DISTINCT * from d_app_user_id;'''
-  ordered_app_user_query = '''SELECT TOP 1 * FROM d_app_user_staging
+  ordered_app_user_query = ''' SELECT TOP 1 app_user_id, first_name, last_name, gender, level
+   FROM d_app_user_staging
   WHERE
     app_user_id = {}
   ORDER BY timestamp desc
   ;'''
+
+  sample = (56, 'Cienna', 'Freeman', 'F', 'free')
+  insert_app_user_query = ''' INSERT INTO d_app_user (app_user_id, first_name, last_name, gender, level) VALUES {};'''
+  print(insert_app_user_query)
   config = configparser.ConfigParser()
   config.read('secrets.ini')
   conn_string = "host={} dbname={} user={} password={} port={}".format(*config['CLUSTER'].values())
@@ -46,10 +51,12 @@ def main():
   for user in distinct_app_users:
     result = database_wrapper.select(ordered_app_user_query.format(user[0]), True)
     users.append(result)
-    print(result)
 
   for u in users:
-    print(u)
+    print(insert_app_user_query.format(u))
+    database_wrapper.execute(
+      insert_app_user_query.format(u)
+    )
 
 
 

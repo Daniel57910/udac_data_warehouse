@@ -8,6 +8,7 @@ import pdb
 import os
 import configparser
 from datetime import datetime
+import csv
 
 def transfer_from_csv_to_staging(database_wrapper):
   # push_staging_files_to_s3(os.getcwd())
@@ -22,7 +23,7 @@ def push_staging_files_to_s3(current_dir):
 def unpack_timestamp(row):
   new_row = list(datetime.fromtimestamp(int(row[0] // 1000)).timetuple()[0: 7])
   new_row[-1] = new_row[-1] > 5
-  return tuple(new_row)
+  return new_row
 
 def main():
 
@@ -34,7 +35,6 @@ def main():
   ORDER BY timestamp desc
   ;'''
 
-  sample = (56, 'Cienna', 'Freeman', 'F', 'free')
   insert_app_user_query = ''' INSERT INTO d_app_user (app_user_id, first_name, last_name, gender, level) VALUES {};'''
   insert_timestamp_query ='''INSERT INTO d_timestamp (year, month, day, hour, minute, second, weekday) VALUES {};'''
   timestamp_query ='''SELECT timestamp from log_staging''';
@@ -64,13 +64,14 @@ def main():
   #   )
 
   timestamp_results = database_wrapper.select(timestamp_query)
-  for res in timestamp_results:
-    print(insert_timestamp_query.format(unpack_timestamp(res)))
-    database_wrapper.execute(insert_timestamp_query.format(
-      unpack_timestamp(res)
-    ))
+  timestamp_results = list(map(unpack_timestamp, timestamp_results))
 
-
+  timestamp_path = os.getcwd() + '/data/timestamp.csv'
+  with open(timestamp_path, 'w') as timestamp_file:
+    writer = csv.writer(timestamp_file)
+    writer.writerows(list(
+      map(unpack_timestamp, timestamp_results))
+    )
 
 if __name__ == "__main__":
     main()

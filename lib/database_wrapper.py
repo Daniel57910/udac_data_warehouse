@@ -5,7 +5,6 @@ import pdb
 class DatabaseWrapper:
 
   def __init__(self, conn_string):
-
     try:
       self.conn = psycopg2.connect(conn_string)
       self.conn.autocommit=True
@@ -14,7 +13,6 @@ class DatabaseWrapper:
       print('Unable to connect to the DB')
 
   def execute(self, query):
-    
     try:
       self.cursor.execute(query)
     except Exception as e:

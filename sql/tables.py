@@ -92,6 +92,7 @@ table_commands = [
   'DROP TABLE IF EXISTS d_app_user;',
   'DROP TABLE IF EXISTS d_timestamp;'
 ]
+
 table_commands.reverse()
 create_all_tables = [song_staging_table, log_staging_table, d_artist_table, d_song_table, d_app_user_table_staging, d_app_user_table]
 table_commands.extend(create_all_tables)

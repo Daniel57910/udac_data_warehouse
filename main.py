@@ -7,6 +7,7 @@ import psycopg2
 import pdb
 import os
 import configparser
+from datetime import datetime
 
 def transfer_from_csv_to_staging(database_wrapper):
   # push_staging_files_to_s3(os.getcwd())
@@ -15,9 +16,13 @@ def transfer_from_csv_to_staging(database_wrapper):
   database_wrapper.execute(copy_song_staging)
   database_wrapper.execute(copy_log_staging)
 
-
 def push_staging_files_to_s3(current_dir):
   subprocess.run(f'aws s3 sync {current_dir}/data s3://sparkify-staging-dmiller/data/',shell=True,check=True)
+
+def unpack_timestamp(row):
+  new_row = list(datetime.fromtimestamp(int(row[0] // 1000)).timetuple()[0: 7])
+  new_row[-1] = new_row[-1] > 5
+  return tuple(new_row)
 
 def main():
 
@@ -31,7 +36,9 @@ def main():
 
   sample = (56, 'Cienna', 'Freeman', 'F', 'free')
   insert_app_user_query = ''' INSERT INTO d_app_user (app_user_id, first_name, last_name, gender, level) VALUES {};'''
-  print(insert_app_user_query)
+  insert_timestamp_query ='''INSERT INTO d_timestamp (year, month, day, hour, minute, second, weekday) VALUES {};'''
+  timestamp_query ='''SELECT timestamp from log_staging''';
+  
   config = configparser.ConfigParser()
   config.read('secrets.ini')
   conn_string = "host={} dbname={} user={} password={} port={}".format(*config['CLUSTER'].values())
@@ -45,18 +52,23 @@ def main():
   # transfer_from_csv_to_staging(database_wrapper)
   # populate_tables_from_staging(database_wrapper)
 
-  distinct_app_users = database_wrapper.select(distinct_app_user_query)
+  # distinct_app_users = database_wrapper.select(distinct_app_user_query)
 
-  print('executing query for distinct_app_users')
-  for user in distinct_app_users:
-    result = database_wrapper.select(ordered_app_user_query.format(user[0]), True)
-    users.append(result)
+  # for user in distinct_app_users:
+  #   result = database_wrapper.select(
+  #     ordered_app_user_query.format(user[0]), 
+  #     True
+  #   )
+  #   database_wrapper.execute(
+  #     insert_app_user_query.format(result)
+  #   )
 
-  for u in users:
-    print(insert_app_user_query.format(u))
-    database_wrapper.execute(
-      insert_app_user_query.format(u)
-    )
+  timestamp_results = database_wrapper.select(timestamp_query)
+  for res in timestamp_results:
+    print(insert_timestamp_query.format(unpack_timestamp(res)))
+    database_wrapper.execute(insert_timestamp_query.format(
+      unpack_timestamp(res)
+    ))
 
 
 

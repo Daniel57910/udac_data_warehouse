@@ -5,6 +5,15 @@ from joblib import Parallel, delayed
 from lib.file_finder import FileFinder
 from lib.data_loader import DataLoader
 import os
+import pdb
+import csv
+from datetime import datetime
+import pandas as pd
+
+def unpack_timestamp(row):
+  new_row = list(datetime.fromtimestamp(int(row // 1000)).timetuple()[0: 7])
+  new_row[-1] = new_row[-1] > 5
+  return new_row
 
 def clean_dataframe_of_non_alphanumeric_characters(dataframe, columns):
   for col in columns:
@@ -35,6 +44,16 @@ def load_dataframe_from_files(file_list):
   data_loader = DataLoader(file_list)
   return data_loader.create_dataframe_from_files()
 
+
+def convert_dataframe_to_csv(dataframe, file_path):
+  dataframe.to_csv(
+      path_or_buf=file_path,
+      index=False,
+      header=False,
+      compression='gzip',
+      line_terminator='\n'
+  )
+
 def fetch_and_dump_to_csv():
   data_dict = {}
   directories = ['log_data', 'song_data']
@@ -62,25 +81,30 @@ def fetch_and_dump_to_csv():
     log_dataframe.lastName.apply(has_hashable_key)
   ]
 
+  timestamp_dataframe = pd.DataFrame(
+      list(map(
+          unpack_timestamp, log_dataframe['ts'].values
+      ))
+  )
+
   song_text_columns = ['artist_location', 'artist_name', 'title']
   log_text_columns = ['artist', 'location', 'userAgent', 'song']
 
   clean_dataframe_of_non_alphanumeric_characters(song_dataframe, song_text_columns)
   clean_dataframe_of_non_alphanumeric_characters(log_dataframe, log_text_columns)
 
+  dataframe_path_dict = {}
+  dataframe_path_dict[aggregate_csv_path + 'song_staging.gz'] = song_dataframe
+  dataframe_path_dict[aggregate_csv_path + 'log_staging.gz'] = log_dataframe
+  dataframe_path_dict[aggregate_csv_path + 'timestamp_data.gz'] = timestamp_dataframe
+
   if not os.path.exists(aggregate_csv_path):
-    os.mkdir(aggregate_csv_path)
+      os.mkdir(aggregate_csv_path)
 
-  song_dataframe.to_csv(
-      path_or_buf=aggregate_csv_path + 'song_staging.csv',
-      index=False,
-      header=False
-  )
+  for path in dataframe_path_dict:
+    convert_dataframe_to_csv(
+      dataframe_path_dict[path], path
+    )
+  
 
-  log_dataframe.to_csv(
-      path_or_buf=aggregate_csv_path + 'log_staging.csv',
-      sep=',',
-      index=False,
-      header=False
-  )
 

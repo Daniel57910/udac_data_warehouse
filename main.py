@@ -11,19 +11,16 @@ from datetime import datetime
 import csv
 
 def transfer_from_csv_to_staging(database_wrapper):
-  # push_staging_files_to_s3(os.getcwd())
-  copy_song_staging = "COPY song_staging FROM 's3://sparkify-staging-dmiller/data/song_staging.csv' iam_role 'arn:aws:iam::774141665752:role/redshift_s3_role' region 'eu-west-2' delimiter ',';"
-  copy_log_staging = "COPY log_staging FROM 's3://sparkify-staging-dmiller/data/log_staging.csv' iam_role 'arn:aws:iam::774141665752:role/redshift_s3_role' region 'eu-west-2' delimiter ',';"
+  push_staging_files_to_s3(os.getcwd())
+  copy_song_staging = "COPY song_staging FROM 's3://sparkify-staging-dmiller/data/song_staging.gz' iam_role 'arn:aws:iam::774141665752:role/redshift_s3_role' region 'eu-west-2' gzip delimiter ',';"
+  copy_log_staging = "COPY log_staging FROM 's3://sparkify-staging-dmiller/data/log_staging.gz' iam_role 'arn:aws:iam::774141665752:role/redshift_s3_role' region 'eu-west-2' gzip delimiter ',';"
+  copy_timestamp_staging = "COPY d_timestamp FROM 's3://sparkify-staging-dmiller/data/timestamp_data.gz' iam_role 'arn:aws:iam::774141665752:role/redshift_s3_role' region 'eu-west-2' gzip delimiter ',';"
   database_wrapper.execute(copy_song_staging)
   database_wrapper.execute(copy_log_staging)
+  database_wrapper.execute(copy_timestamp_staging)
 
 def push_staging_files_to_s3(current_dir):
   subprocess.run(f'aws s3 sync {current_dir}/data s3://sparkify-staging-dmiller/data/',shell=True,check=True)
-
-def unpack_timestamp(row):
-  new_row = list(datetime.fromtimestamp(int(row[0] // 1000)).timetuple()[0: 7])
-  new_row[-1] = new_row[-1] > 5
-  return new_row
 
 def main():
 
@@ -52,26 +49,20 @@ def main():
   # transfer_from_csv_to_staging(database_wrapper)
   # populate_tables_from_staging(database_wrapper)
 
-  # distinct_app_users = database_wrapper.select(distinct_app_user_query)
+  distinct_app_users = database_wrapper.select(distinct_app_user_query)
 
-  # for user in distinct_app_users:
-  #   result = database_wrapper.select(
-  #     ordered_app_user_query.format(user[0]), 
-  #     True
-  #   )
-  #   database_wrapper.execute(
-  #     insert_app_user_query.format(result)
-  #   )
-
-  timestamp_results = database_wrapper.select(timestamp_query)
-  timestamp_results = list(map(unpack_timestamp, timestamp_results))
-
-  timestamp_path = os.getcwd() + '/data/timestamp.csv'
-  with open(timestamp_path, 'w') as timestamp_file:
-    writer = csv.writer(timestamp_file)
-    writer.writerows(list(
-      map(unpack_timestamp, timestamp_results))
+  for user in distinct_app_users:
+    result = database_wrapper.select(
+      ordered_app_user_query.format(user[0]), 
+      True
     )
+    users.append(result)
+
+  for user in users:
+    database_wrapper.execute(
+      insert_app_user_query.format(user)
+    )
+
 
 if __name__ == "__main__":
     main()

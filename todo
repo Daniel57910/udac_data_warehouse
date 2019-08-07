@@ -1,6 +1,7 @@
-create schema for d_timestamp
-
+REFACTORING:
+convert all files to tar files before pushing to s3
 make database wrapper class object so globally accessable
+
 
 
 redshift

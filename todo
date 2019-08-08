@@ -1,5 +1,8 @@
+drop fact table
+create fact table
+put iam user in secrets file
+
 REFACTORING:
-convert all files to tar files before pushing to s3
 make database wrapper class object so globally accessable
 
 
@@ -9,3 +12,16 @@ review distkey -> determines how data distributed across cluster
 sortkey -> creates compound columns that's sorted to enable binary search
 primary key -> key used to reference table on joins 
 
+
+song_staging
+
+songplay_id: serial
+d_timestamp.second on timestamp
+d_timestamp.minute on timestamp
+user_id.log_staging
+level.log_staging
+d_song.song_id on title
+d_artist.artist_id on artist_name
+session_id.log_staging
+location.log_staging
+user_agent.log_staging

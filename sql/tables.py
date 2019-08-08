@@ -80,8 +80,11 @@ day INT,
 minute INT,
 second INT,
 hour INT,
-weekday BOOL
-);'''
+weekday BOOL,
+timestamp BIGINT,
+PRIMARY KEY(timestamp_key))
+SORTKEY(timestamp);'''
+
 
 table_commands = [
   'DROP TABLE IF EXISTS song_staging;', 
@@ -91,7 +94,8 @@ table_commands = [
   'DROP TABLE IF EXISTS d_app_user_staging;',
   'DROP TABLE IF EXISTS d_app_user;',
   'DROP TABLE IF EXISTS d_app_user_id;',
-  'DROP TABLE IF EXISTS d_timestamp;'
+  'DROP TABLE IF EXISTS d_timestamp;',
+  'DROP TABLE IF EXISTS f_songplay'
 ]
 
 table_commands.reverse()

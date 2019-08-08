@@ -41,13 +41,13 @@ def main():
   conn_string = "host={} dbname={} user={} password={} port={}".format(*config['CLUSTER'].values())
   database_wrapper = DatabaseWrapper(conn_string)
 
-  # for command in table_commands:
-  #   database_wrapper.execute(command)
+  for command in table_commands:
+    database_wrapper.execute(command)
 
   users = []
-  # fetch_and_dump_to_csv()
-  # transfer_from_csv_to_staging(database_wrapper)
-  # populate_tables_from_staging(database_wrapper)
+  fetch_and_dump_to_csv()
+  transfer_from_csv_to_staging(database_wrapper)
+  populate_tables_from_staging(database_wrapper)
 
   distinct_app_users = database_wrapper.select(distinct_app_user_query)
 

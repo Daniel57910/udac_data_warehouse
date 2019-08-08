@@ -13,6 +13,7 @@ import pandas as pd
 def unpack_timestamp(row):
   new_row = list(datetime.fromtimestamp(int(row // 1000)).timetuple()[0: 7])
   new_row[-1] = new_row[-1] > 5
+  new_row.append(row)
   return new_row
 
 def clean_dataframe_of_non_alphanumeric_characters(dataframe, columns):
@@ -86,7 +87,7 @@ def fetch_and_dump_to_csv():
           unpack_timestamp, log_dataframe['ts'].values
       ))
   )
-
+  
   song_text_columns = ['artist_location', 'artist_name', 'title']
   log_text_columns = ['artist', 'location', 'userAgent', 'song']
 
@@ -106,5 +107,4 @@ def fetch_and_dump_to_csv():
       dataframe_path_dict[path], path
     )
   
-
 

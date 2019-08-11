@@ -1,6 +1,8 @@
 import psycopg2
 from psycopg2.extras import execute_batch
 import pdb
+from psycopg2.extras import execute_batch
+
 
 class DatabaseWrapper:
 
@@ -31,5 +33,8 @@ class DatabaseWrapper:
       return self.cursor.fetchall()
     except Exception as e:
       raise Exception(f'Unable to execute {query}: {e}')
+
+  def execute_batch(self, query, dataset):
+    execute_batch(self.cursor, query, dataset)
 
 

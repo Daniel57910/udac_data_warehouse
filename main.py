@@ -33,21 +33,19 @@ def main():
   ORDER BY timestamp desc
   ;'''
 
-  songplay_staging_fetch_all = '''SELECT
-    timestamp,
-    first_name,
-    last_name,
-    level,
-    artist,
-    song_name,
-    session_id,
-    location,
-    user_agent,
-  FROM
-  log_staging;
-  '''
+  songplay_staging_fetch_all = '''SELECT first_name, last_name, level, artist, song_name, artist, session_id, location, user_agent, timestamp FROM log_staging;'''
 
-  songplay_insert = '''INSERT INTO f_songplay
+  songplay_insert = '''INSERT INTO f_songplay 
+    (user_id, level, artist_key, song_key, session_id, location, user_agent, start_time) VALUES (
+    (select app_user_key from d_app_user where first_name = %s and last_name = %s),
+    %s,
+    (select top 1 artist_key from d_artist where artist_name = %s),
+    (select song_key from d_song where title = %s and artist_id = (SELECT top 1 artist_id from d_artist where artist_name = %s)),
+    %s,
+    %s,
+    %s,
+    %s
+    );'''
 
   insert_app_user_query = ''' INSERT INTO d_app_user (app_user_id, first_name, last_name, gender, level) VALUES {};'''
   insert_timestamp_query ='''INSERT INTO d_timestamp (year, month, day, hour, minute, second, weekday) VALUES {};'''
@@ -84,8 +82,11 @@ def main():
     database_wrapper.conn
   )
 
-  print(song_play_dataframe.head(100))
+  song_play_dataframe = list(song_play_dataframe.itertuples(index=False, name=None))
 
+  database_wrapper.execute_batch(
+    songplay_insert, song_play_dataframe
+  )
 
   
   

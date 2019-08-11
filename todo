@@ -1,5 +1,6 @@
-create fact table
+populate fact table
 put iam user in secrets file
+review refactoring and complete refactoring in accordance with project rubric
 review pickle files
 
 REFACTORING:
@@ -25,16 +26,3 @@ session_id.log_staging
 location.log_staging
 user_agent.log_staging
 
-  songplay_insert = '''INSERT INTO f_songplay 
-    (start_time, user_key, level, artist_key, song_key, session_id, location, user_agent) VALUES
-    (1541903636796, 
-    (select user_key from d_app_user where first_name = Anabelle and last_name = Simpson),
-    Free,
-    (select artist_key from d_artist where artist_name = Frumpies),
-    (select song_key from d_song where song_key = Fuck Kitty),
-    455,
-    Blabla,
-    Bla3Bla
-    );'''
-
-0    Anabelle    Simpson  free                    Frumpies                                Fuck Kitty         455  PhiladelphiaCamdenWilmington PANJDEMD  Mozilla50 Macintosh Intel Mac OS X 10_9_4 Appl...  1541903636796

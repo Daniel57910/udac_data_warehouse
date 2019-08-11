@@ -109,6 +109,7 @@ env.bak/
 venv.bak/
 secrets.*
 *.cfg
+dhw.cfg
 tmp/
 # Spyder project settings
 .spyderproject

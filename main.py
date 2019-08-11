@@ -37,7 +37,7 @@ def main():
 
   songplay_insert = '''INSERT INTO f_songplay 
     (user_id, level, artist_key, song_key, session_id, location, user_agent, start_time) VALUES (
-    (select app_user_key from d_app_user where first_name = %s and last_name = %s),
+    (select top 1 app_user_key from d_app_user where first_name = %s and last_name = %s order by app_user_id DESC),
     %s,
     (select top 1 artist_key from d_artist where artist_name = %s),
     (select song_key from d_song where title = %s and artist_id = (SELECT top 1 artist_id from d_artist where artist_name = %s)),
@@ -82,7 +82,10 @@ def main():
     database_wrapper.conn
   )
 
+  
+
   song_play_dataframe = list(song_play_dataframe.itertuples(index=False, name=None))
+  print(len(song_play_dataframe))
 
   database_wrapper.execute_batch(
     songplay_insert, song_play_dataframe

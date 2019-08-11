@@ -38,7 +38,7 @@ artist_location TEXT,
 artist_longitude TEXT,
 artist_name TEXT not null,
 PRIMARY KEY(artist_key))
-COMPOUND SORTKEY(artist_key, artist_id, artist_name);'''
+COMPOUND SORTKEY(artist_key, artist_name);'''
 
 d_song_table = '''CREATE TABLE IF NOT EXISTS d_song
 (song_key BIGINT identity(0, 1),
@@ -48,7 +48,8 @@ duration NUMERIC,
 year INT,
 artist_id TEXT REFERENCES d_artist(artist_key),
 PRIMARY KEY(song_key))
-COMPOUND SORTKEY(artist_id, title, year);'''
+COMPOUND SORTKEY(artist_id, title, year)
+COPOUND SORTKEY(song_key, title);'''
 
 d_app_user_table_staging = '''CREATE TABLE IF NOT EXISTS d_app_user_staging
 (app_user_key BIGINT identity(0, 1),
@@ -69,7 +70,8 @@ first_name TEXT,
 last_name TEXT,
 gender TEXT,
 level TEXT,
-PRIMARY KEY(app_user_id));'''
+PRIMARY KEY(app_user_id));
+COMPOUND SORTKEY(app_user_key, first_name, last_name)'''
 
 d_timestamp_table = '''CREATE TABLE IF NOT EXISTS
 d_timestamp(

@@ -48,8 +48,7 @@ duration NUMERIC,
 year INT,
 artist_id TEXT REFERENCES d_artist(artist_key),
 PRIMARY KEY(song_key))
-COMPOUND SORTKEY(artist_id, title, year)
-COPOUND SORTKEY(song_key, title);'''
+COMPOUND SORTKEY(song_key, title);'''
 
 d_app_user_table_staging = '''CREATE TABLE IF NOT EXISTS d_app_user_staging
 (app_user_key BIGINT identity(0, 1),
@@ -70,8 +69,8 @@ first_name TEXT,
 last_name TEXT,
 gender TEXT,
 level TEXT,
-PRIMARY KEY(app_user_id));
-COMPOUND SORTKEY(app_user_key, first_name, last_name)'''
+PRIMARY KEY(app_user_id))
+COMPOUND SORTKEY(app_user_key, first_name, last_name);'''
 
 d_timestamp_table = '''CREATE TABLE IF NOT EXISTS
 d_timestamp(

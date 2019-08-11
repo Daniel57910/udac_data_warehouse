@@ -33,7 +33,8 @@ def main():
   ORDER BY timestamp desc
   ;'''
 
-  f_songplay_fetch_all = '''SELECT
+  songplay_staging_fetch_all = '''SELECT
+    timestamp,
     first_name,
     last_name,
     level,
@@ -42,10 +43,11 @@ def main():
     session_id,
     location,
     user_agent,
-    timestamp
   FROM
   log_staging;
   '''
+
+  songplay_insert = '''INSERT INTO f_songplay
 
   insert_app_user_query = ''' INSERT INTO d_app_user (app_user_id, first_name, last_name, gender, level) VALUES {};'''
   insert_timestamp_query ='''INSERT INTO d_timestamp (year, month, day, hour, minute, second, weekday) VALUES {};'''
@@ -78,7 +80,7 @@ def main():
   #   )
 
   song_play_dataframe = sqlio.read_sql(
-    f_songplay_fetch_all, 
+    songplay_staging_fetch_all,
     database_wrapper.conn
   )
 

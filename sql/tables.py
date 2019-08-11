@@ -85,6 +85,19 @@ timestamp BIGINT,
 PRIMARY KEY(timestamp_key))
 SORTKEY(timestamp);'''
 
+f_songplay_table = '''CREATE TABLE IF NOT EXISTS
+f_songplay(
+songplay_key BIGINT identity(0, 1),
+start_time BIGINT,
+user_id INT REFERENCES d_app_user(app_user_id),
+level TEXT,
+song_key INT REFERENCES d_song(song_key),
+artist_key INT REFERENCES d_artist(artist_key),
+session_id INT, 
+location TEXT,
+user_agent TEXT,
+PRIMARY KEY(songplay_key));'''
+
 
 table_commands = [
   'DROP TABLE IF EXISTS song_staging;', 
@@ -99,7 +112,16 @@ table_commands = [
 ]
 
 table_commands.reverse()
-create_all_tables = [song_staging_table, log_staging_table, d_artist_table, d_song_table, d_app_user_table_staging, d_app_user_table, d_timestamp_table]
-table_commands.extend(create_all_tables)
+create_all_tables = [
+  song_staging_table, 
+  log_staging_table, 
+  d_artist_table, 
+  d_song_table, 
+  d_app_user_table_staging, 
+  d_app_user_table, 
+  d_timestamp_table, 
+  f_songplay_table
+]
 
+table_commands.extend(create_all_tables)
 

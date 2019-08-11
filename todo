@@ -1,7 +1,6 @@
-drop fact table
 create fact table
 put iam user in secrets file
-
+review pickle files
 REFACTORING:
 make database wrapper class object so globally accessable
 
@@ -16,9 +15,8 @@ primary key -> key used to reference table on joins
 song_staging
 
 songplay_id: serial
-d_timestamp.second on timestamp
-d_timestamp.minute on timestamp
-user_id.log_staging
+timestamp: log_staging
+user_id.log_staging 
 level.log_staging
 d_song.song_id on title
 d_artist.artist_id on artist_name

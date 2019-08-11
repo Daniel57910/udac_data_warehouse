@@ -8,7 +8,8 @@ import pdb
 import os
 import configparser
 from datetime import datetime
-import csv
+import pandas.io.sql as sqlio
+
 
 def transfer_from_csv_to_staging(database_wrapper):
   push_staging_files_to_s3(os.getcwd())
@@ -32,6 +33,20 @@ def main():
   ORDER BY timestamp desc
   ;'''
 
+  f_songplay_fetch_all = '''SELECT
+    first_name,
+    last_name,
+    level,
+    artist,
+    song_name,
+    session_id,
+    location,
+    user_agent,
+    timestamp
+  FROM
+  log_staging;
+  '''
+
   insert_app_user_query = ''' INSERT INTO d_app_user (app_user_id, first_name, last_name, gender, level) VALUES {};'''
   insert_timestamp_query ='''INSERT INTO d_timestamp (year, month, day, hour, minute, second, weekday) VALUES {};'''
   timestamp_query ='''SELECT timestamp from log_staging''';
@@ -41,27 +56,37 @@ def main():
   conn_string = "host={} dbname={} user={} password={} port={}".format(*config['CLUSTER'].values())
   database_wrapper = DatabaseWrapper(conn_string)
 
-  for command in table_commands:
-    database_wrapper.execute(command)
+  # for command in table_commands:
+  #   database_wrapper.execute(command)
 
-  users = []
-  fetch_and_dump_to_csv()
-  transfer_from_csv_to_staging(database_wrapper)
-  populate_tables_from_staging(database_wrapper)
+  # users = []
+  # fetch_and_dump_to_csv()
+  # transfer_from_csv_to_staging(database_wrapper)
+  # populate_tables_from_staging(database_wrapper)
 
-  distinct_app_users = database_wrapper.select(distinct_app_user_query)
+  # distinct_app_users = database_wrapper.select(distinct_app_user_query)
 
-  for user in distinct_app_users:
-    result = database_wrapper.select(
-      ordered_app_user_query.format(user[0]), 
-      True
-    )
-    users.append(result)
+  # for user in distinct_app_users:
+  #   result = database_wrapper.select_all(
+  #     ordered_app_user_query.format(user[0]) 
+  #   )
+  #   users.append(result)
 
-  for user in users:
-    database_wrapper.execute(
-      insert_app_user_query.format(user)
-    )
+  # for user in users:
+  #   database_wrapper.execute(
+  #     insert_app_user_query.format(user)
+  #   )
+
+  song_play_dataframe = sqlio.read_sql(
+    f_songplay_fetch_all, 
+    database_wrapper.conn
+  )
+
+  print(song_play_dataframe.head(100))
+
+
+  
+  
 
 
 if __name__ == "__main__":

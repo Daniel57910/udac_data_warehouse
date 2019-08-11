@@ -32,7 +32,7 @@ SELECT
 FROM
   log_staging;'''
 
-app_user_id_insert = '''CREATE TABLE d_app_user_id AS SELECT app_user_id FROM d_app_user_staging;'''
+app_user_id_insert = '''CREATE TEMP TABLE d_app_user_id AS SELECT app_user_id FROM d_app_user_staging;'''
 
 query = [artist_insert, song_insert, app_user_staging_insert, app_user_id_insert]
 

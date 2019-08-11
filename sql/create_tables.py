@@ -113,6 +113,7 @@ table_commands = [
 ]
 
 table_commands.reverse()
+
 create_all_tables = [
   song_staging_table, 
   log_staging_table, 

@@ -1,4 +1,5 @@
 from multiprocessing import Pool
+import multiprocessing
 import subprocess
 import re
 from joblib import Parallel, delayed
@@ -61,8 +62,8 @@ def fetch_and_dump_to_csv():
   local_path = os.getcwd() + '/tmp'
   aggregate_csv_path = os.getcwd() + '/data/'
 
-  #with Pool(processes=multiprocessing.cpu_count()) as pool:
-    #pool.map(fetch_files_from_s3, directories)
+  with Pool(processes=multiprocessing.cpu_count()) as pool:
+    pool.map(fetch_files_from_s3, directories)
   
   for dir in directories:
     data_dict[dir] = fetch_file_names(f'{local_path}/{dir}/', '*.json')

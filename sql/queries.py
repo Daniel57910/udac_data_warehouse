@@ -1,5 +1,10 @@
 
-from collections import OrderedDict
+'''
+list of insert queries executed directly via sql
+stored in query list
+application_insert_queries dict require loading data from table to memory then reinsertion
+select queries used to select data from DB to be manipulated prior to transfer to dimension table
+'''
 
 artist_insert = '''INSERT INTO d_artist (artist_id, artist_latitude, artist_location, artist_longitude, artist_name)
 SELECT

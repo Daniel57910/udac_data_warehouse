@@ -1,7 +1,12 @@
 import pandas as pd
 import json
-import pdb
-import re
+
+'''
+Class that receives a list of files
+loads contents of all files into list
+list extended into aggregate file data
+aggregate file data converted to dataframe and returned
+'''
 class DataLoader:
 
 	def __init__(self, matched_files):

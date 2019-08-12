@@ -1,3 +1,10 @@
+'''
+File containing the redshift schema
+List of tables loaded into etl.py
+All tables dropped then created
+Review diagrams in README for relational model
+'''
+
 song_staging_table = '''CREATE TABLE IF NOT EXISTS song_staging
 (artist_id TEXT not null,
 artist_latitude NUMERIC,

@@ -1,8 +1,11 @@
 import psycopg2
 from psycopg2.extras import execute_batch
-import pdb
-from psycopg2.extras import execute_batch
 
+'''
+Wrapper class for database transactions
+receives a connection string to create connection to redshift using PSQL as DB client
+DB client used to create tables, drop tables and perform CRUD operations
+'''
 
 class DatabaseWrapper:
 

@@ -1,6 +1,10 @@
 import glob
-import pdb
 
+'''
+file finder class
+recursively searches directory for all files that match file type
+returns list of all files that match file type
+'''
 class FileFinder():
 
   def __init__(self, start_directory, file_type):

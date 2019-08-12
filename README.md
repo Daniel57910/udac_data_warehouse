@@ -31,7 +31,8 @@ DB_PORT=
 
 IAM_ROLE=
 
-* With the virtualenv loaded run python etl.py. The script takes approximately 11 minutes to run.
+With the virtualenv loaded run python etl.py. The script takes approximately 11 minutes to run.
+At the end check the redshift tables for the data, or perform some queries to represent some business use cases.
 
 #### Caveats With Current Approach
 
